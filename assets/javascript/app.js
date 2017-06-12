@@ -19,10 +19,6 @@ $(document).ready(function() {
     var startTime = 0;
     var frequency = 0;
 
-    //Calculated Values
-    var nextArrival = 0;
-    var minutesAway = 0;
-
     $("#add-Train").on("click", function(event) {
         event.preventDefault();
 
@@ -39,9 +35,6 @@ $(document).ready(function() {
         var firstTimeConverted = moment(startTime, "HHmm").subtract(1, "years");
         console.log(firstTimeConverted);
 
-        // Current Time
-        var currentTime = moment();
-        console.log("CURRENT TIME: " + moment(currentTime).format("HHmm"));
 
         // Difference between the times
         var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
@@ -65,8 +58,6 @@ $(document).ready(function() {
             destination: destination,
             startTime: startTime,
             frequency: frequency,
-            nextArrival: nextArrival,
-            minutesAway: minutesAway
         });
         //Clear fields in "Add Train"
         $("#train-name").val("");
@@ -74,5 +65,25 @@ $(document).ready(function() {
         $("#start-time").val("");
         $("#train-frequency").val("");
     });
+
+database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+	console.log(childSnapshot.val());
+
+	var recall_name = childSnapshot.val().name;
+	var recall_destination = childSnapshot.val().destination;
+	var recall_startTime = childSnapshot.val().startTime;
+	var recall_frequency = childSnapshot.val().frequency;
+
+	// Calculate Time of Next Train Arrival and minute until next train arrives
+	// convert the Start time of the train to be used by momentJS as HHmm
+	var firstTimeConverted = moment(recall_startTime, "HHmm").subtract(1, "years");
+	// Find the difference in minutes between the start time and the current time
+	var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+	var tRemainder = diffTime % recall_frequency;
+	var minutesAway = recall_frequency - tRemainder;
+	var nextTrain = moment().add(minutesAway, "minutes");
+	var nextArrival = moment(nextTrain, "HHmm").format("HHmm");
+	$("#trainTable > tbody").append("<tr><td>" + recall_name + "</td><td>" + recall_destination + "</td><td>" + recall_frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway  + "</td></tr>");
+});
 
 });
