@@ -89,6 +89,10 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 	var nextArrival = moment(nextTrain, "HHmm").format("h:mm A");
 	// add an entry to the train table
 	$("#trainTable > tbody").append("<tr><td>" + recall_name + "</td><td>" + recall_destination + "</td><td>" + recall_frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway  + "</td></tr>");
+
+	} , function(errorObject) {
+		console.log("Errors handled: " + errorObject.code);
+
 });
 
 });

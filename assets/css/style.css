@@ -1,0 +1,27 @@
+body {
+	background-image: url("../images/Train_wreck_at_Montparnasse_1895.jpg");
+	background-size: cover;
+}
+
+.panel {
+background-color:rgba(255, 255, 255, 0.75);
+}
+
+@font-face {
+	font-family: fontForJumbotron;
+	src: url("../fonts/Romantiques.ttf");
+}
+
+.jumbotron {
+	text-align: center;
+	background-color:rgba(255, 255, 255, 0.9);
+}
+.jumbotron h2 {
+	font-family: fontForJumbotron;
+	font-size: 50px;
+}
+
+.panel-heading {
+	font-family: times;
+	font-size: 18px;
+}
