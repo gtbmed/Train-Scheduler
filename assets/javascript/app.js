@@ -79,10 +79,15 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 	var firstTimeConverted = moment(recall_startTime, "HHmm").subtract(1, "years");
 	// Find the difference in minutes between the start time and the current time
 	var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+	// Divide the difference by the frequency as the remainder is used in the next calculation
 	var tRemainder = diffTime % recall_frequency;
+	//The frequency each train arrives minus the remainder equals the amount of time till the next train
 	var minutesAway = recall_frequency - tRemainder;
+	// Add the minutes from arrival to the current time to give an arrival time
 	var nextTrain = moment().add(minutesAway, "minutes");
-	var nextArrival = moment(nextTrain, "HHmm").format("HHmm");
+	//Store the arrival time in a usable format
+	var nextArrival = moment(nextTrain, "HHmm").format("h:mm A");
+	// add an entry to the train table
 	$("#trainTable > tbody").append("<tr><td>" + recall_name + "</td><td>" + recall_destination + "</td><td>" + recall_frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway  + "</td></tr>");
 });
 
